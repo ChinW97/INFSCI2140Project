@@ -1,37 +1,58 @@
 import React, {useState, useEffect}  from 'react';
-import { Button } from './Button';
 import './WelcomeSection.css';
 import '../App.css';
-import Alert from 'react-popup-alert'
-import userEvent from '@testing-library/user-event';
+import Input from '@reactmaker/react-autocorrect-input';
+
+var POTENTIALQUERIES = ['machine learning', 'cloud computing', 'computer architecture', 'natural language']
 
 const renderResult = (item, i) => {
     let info = item.split(' ');
-    let courseNum = info[0] + ' ' + info[1];
     let size = info.length;
 
+    if(info[0] === 'error'){
+        return(<li><p>{info.slice(1,size).join(' ')}</p></li>);
+    }
+
+    let course = JSON.parse(item);
+
     return (<li key={i}> 
-    <p>Course Num: {courseNum}</p>
-    <p>Course Title: {info.slice(2,size).join(' ')}</p>
-    <p>Description: N/A</p>
+    <p>Course Num: {course.department + ' ' + course.courseNumber}</p>
+    <p>Course Title: {course.courseTitle}</p>
+    <p>Description: </p>
+    <p>{course.courseDescription}</p>
     </li>)
 };
 
 function WelcomeSection() {
     const [keywords, setKeywords] = useState("");
     const [results, setResult] = useState([]);
-    // const [visibleMsg, setVisibleMsg] = useState(false);
+    const [querySearch, setQuerySearch] = useState(true);
+    const [exactSearch, setExactSearch] = useState(false);
 
-    const handleSearch = async () => {
+    const handleQuerySearch = async () => {
         try {
             const apiResponseObj = await fetch(
-              "http://localhost:3001/api", {method:'POST', headers: {
+              "http://localhost:3001/query", {method:'POST', headers: {
                 "Content-Type": "application/json",},
                 body: JSON.stringify({terms: keywords})}
             );
             const apiResponse = await apiResponseObj.json();
             setResult(apiResponse.data);
-            
+          } catch (err) {
+            console.log(err);
+          }
+    };
+
+    const handleExactSearch = async() => {
+        setResult([]);
+        try {
+            const apiResponseObj = await fetch(
+              "http://localhost:3001/exact-search", {method:'POST', headers: {
+                "Content-Type": "application/json",},
+                body: JSON.stringify({terms: keywords})}
+            );
+            const apiResponse = await apiResponseObj.json();
+            setResult(apiResponse.data);
           } catch (err) {
             console.log(err);
           }
@@ -41,51 +62,57 @@ function WelcomeSection() {
         <div className='welcome-container'>
             <video src='/videos/video-2.mp4' autoPlay loop muted/>
             <h1>Welcome!</h1>
-            <div className='welcome-btns'>
-                {/* <Button className='btn' 
-                buttonStyle='btn--outline'
-                buttonSize='btn--large'>
-                    Get Started
-                </Button> */}
-
-                {/* <Button className='btn' 
-                buttonStyle='btn--outline'
-                buttonSize='btn--medium'>
-                    Search
-                </Button> */}
-            </div>
             
-            <div className='search-container'>
-                <input placeholder="Enter keywords"
-                onChange={event =>{setKeywords(event.target.value)}}
-                onKeyDown={(event)=>{
-                    if(event.key === 'Enter'){
-                        if(keywords.length > 0){
-                            handleSearch();
+            <div className='search-container' tabIndex='0' 
+            onKeyDown={(event)=>{
+                if(event.key === 'Enter'){
+                    if(keywords.length > 0){
+                        if(querySearch){
+                            handleQuerySearch();
                         }else{
-                            setResult([]);
-                        };
-                    }
-                    
-                }}
-                />
+                            handleExactSearch();
+                        }
+                    }else{
+                        setResult([]);
+                    };
+                }
+            }}>
 
-                {/* <Button className='btn' 
-                buttonStyle='btn--outline'
-                buttonSize='btn--medium'
-                onClick={()=>{console.log(keywords)}}>
-                    Search
-                </Button> */}
+                <Input className="search-bar"
+                onChange={value =>{setKeywords(value)}}
+                value = {keywords}
+                style={{width:'100%'}}
+                dataSource = {POTENTIALQUERIES}
+                />
+            </div>
+
+            <div className="options-container">
+                <span class={ querySearch ? "dot-selected":"dot-unselected"} 
+                onClick={()=>{setQuerySearch(true); setExactSearch(false)}} > </span>
+                <p>Query Search</p>
+                <span class={ exactSearch ? "dot-selected":"dot-unselected"} 
+                onClick={()=>{setExactSearch(true); setQuerySearch(false)}}></span>
+                <p>Exact Search</p>
             </div>
 
             <div className='display-window'>
                 <ul className='result-container'>
                     {results.map((item, i) => renderResult(item, i))}
                 </ul>
-            </div>
-            
-            
+                
+                {results.length === 0 && 
+                <div className="default-message">
+                    <p>
+                    Thank you for using our course search system! 
+                    </p>
 
+                    <p>
+                    Please select one of the search type before you start the search!
+                    </p>
+
+                </div>
+                }
+            </div>
         </div>
 
         

@@ -26,6 +26,9 @@ class QueryRetrievalModel:
             docs = self.indexReader.getPostingList1(cur_q)
             if not docs:
                 continue
+            
+            if docs == -1:
+                return None
 
             for docId, fre in docs.items():
                 if docId not in doc_freq:
