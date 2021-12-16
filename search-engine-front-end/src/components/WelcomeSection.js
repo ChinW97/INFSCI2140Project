@@ -1,9 +1,10 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState}  from 'react';
 import './WelcomeSection.css';
 import '../App.css';
 import Input from '@reactmaker/react-autocorrect-input';
 
-var POTENTIALQUERIES = ['machine learning', 'cloud computing', 'computer architecture', 'natural language']
+var POTENTIALQUERIES = ['machine learning', 'cloud computing', 'computer architecture', 
+'natural language', 'database management', 'database design']
 
 const renderResult = (item, i) => {
     let info = item.split(' ');
@@ -116,7 +117,7 @@ function WelcomeSection() {
                     </p>
 
                     <p>
-                    Please select one of the search type before you start the search!
+                    Please select one of the search types before you start the search!
                     </p>
 
                 </div>
