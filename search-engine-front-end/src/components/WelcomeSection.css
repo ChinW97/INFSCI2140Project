@@ -4,6 +4,8 @@ video {
     height: 100%;
     position: fixed;
     z-index: -1;
+    /* opacity: 0.7; */
+    
   }
   
   .welcome-container {
@@ -80,7 +82,7 @@ video {
   }
 
 
-  input.search-bar{
+  .search-bar{
     height: 44px;
     width: 90%;
     border: 0;
@@ -106,10 +108,8 @@ video {
   .result-container > li {
     width: 370px;
     height: auto;
-    background-color: #fff;
+    background-color:transparent;
     margin-top: 10px;
-    border-radius: 5px;
-    list-style: none;
   }
 
   .display-window{
@@ -117,6 +117,7 @@ video {
     overflow: auto;
     overflow-y: scroll; 
     -ms-overflow-style: none;
+    
   }
 
   .display-window::-webkit-scrollbar {
@@ -124,6 +125,33 @@ video {
     margin-bottom: -50px;
   }
 
+  fieldset {
+    display: block;
+    margin: 20px auto;
+    padding: 5px;
+    list-style: none;
+    border: 0;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    width: 50%;
+    color: #fff;
+    font-size: 15px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+      'Lucida Sans', Arial, sans-serif;
+    backdrop-filter: blur(5px);
+    min-width: 200px;
+  }
+  legend {
+    display: table;
+    min-width: 0px;
+    max-width: 70%;
+    position: relative;
+    margin: auto;
+    padding: 5px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;  
+  }
 
   .dot-selected {
     height: 15px;
@@ -171,13 +199,21 @@ video {
 }
 
 
-
-
-
-
-
-
-
-
-
-
+  fieldset a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  fieldset a:visited {
+    color: #702963;
+    text-decoration: none;
+  }
+  
+  fieldset a:hover {
+    border-bottom: 1px solid;
+  }
+  
+  fieldset a:active {
+    color: #C3B1E1;
+  }
+  

@@ -10,17 +10,26 @@ const renderResult = (item, i) => {
     let size = info.length;
 
     if(info[0] === 'error'){
-        return(<li><p>{info.slice(1,size).join(' ')}</p></li>);
+        return(
+            <fieldset>
+                <li>
+                    <p>{info.slice(1,size).join(' ')}</p>
+                    </li>
+            </fieldset>
+                );
     }
 
     let course = JSON.parse(item);
 
-    return (<li key={i}> 
-    <p>Course Num: {course.department + ' ' + course.courseNumber}</p>
-    <p>Course Title: {course.courseTitle}</p>
-    <p>Description: </p>
-    <p>{course.courseDescription}</p>
-    </li>)
+    return(
+        <fieldset>
+        <legend><a href={'https://courses.sci.pitt.edu/courses/view/'+ String(course.department) + '-' + String(course.courseNumber)} > { String(course.department)+ ' ' + String(course.courseNumber)}</a></legend>
+       <li key={i}> 
+           <p>Course Title: {course.courseTitle}</p>
+           <p>Description: </p>
+           <p>{course.courseDescription}</p>
+           </li>
+       </fieldset>)
 };
 
 function WelcomeSection() {
